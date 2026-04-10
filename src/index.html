@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        body {
+            font-family: Cascadia Code;
+            text-align: center;
+        }
+        input#progress {
+            width: 800px;
+        }
+        #description {
+            width: 800px;
+            display: inline-block;
+            text-align: left;
+        }
+        .instruction {
+            color: gray;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="index.js"></script>
+</head>
+<body>
+    <a href="https://en.wikipedia.org/wiki/De_Boor%27s_algorithm" target="_blank"><h3>B-Spline. De Boor's algorithm</h3></a>
+    <canvas id="spline" width="800" height="600"></canvas><br/>
+    <h5 class="instruction">Use 'Control + Mouse Button' to Add/Remove control points</h5>
+    <input type="checkbox" id="showProgress"/><label for="showProgress">Progress</label>
+    <input type="checkbox" id="showRuler"/><label for="showRuler">Ruler</label>
+    <input type="checkbox" id="closed"/><label for="closed">Closed</label><span>&nbsp;&nbsp;</span>
+    <input type="range" id="degree" min="1" max="5" value="3"/><label for="degree">Degree</label><span>&nbsp;&nbsp;</span>
+    <button id="clear">Clear</button><span>&nbsp;&nbsp;</span><br/>
+    <div id="description"></div><br/>
+    <canvas id="knots" width="800" height="50"></canvas><br/>
+    <h5 class="instruction">Use 'Mouse Button' to drag knots around</h5>
+    <input type="range" id="progress" min="0" max="1000" value="0"/><br/>
+</body>

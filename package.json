@@ -1,0 +1,19 @@
+{
+  "name": "bspline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && npx browserify dist/index.js > dist/bundle.js && node ./tools/post-build.js"
+  },
+  "keywords": ["b-spline", "curve", "De Boor's algorithm", "visualize", "editor"],
+  "author": "putyavka",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "browserify": "^17.0.1"
+  }
+}
