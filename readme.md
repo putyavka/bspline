@@ -2,6 +2,8 @@
 
 B-Spline curve visualization tool implementing [**De Boor's algorithm**](https://en.wikipedia.org/wiki/De_Boor%27s_algorithm).
 
+## [Live demo](https://putyavka.github.io/bspline/dist/)
+
 ## Features
 
 - **Interactive Control Points**: Add/remove control points with Ctrl+Click
