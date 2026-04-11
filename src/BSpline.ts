@@ -35,34 +35,34 @@ export class BSpline {
         t = this.normalize(t);
         const k = this.findInterval(t);
         for (let i = 0; i <= p; i++)
-            D[i]!.x = C[i + k - p]!.x, D[i]!.y = C[i + k - p]!.y;
+            D[i].x = C[i + k - p].x, D[i].y = C[i + k - p].y;
         for (let r = p; r > 0; r--) {
             if (r == 1)
-                this._tangent.x = D[1]!.x - D[0]!.x,
-                    this._tangent.y = D[1]!.y - D[0]!.y;
+                this._tangent.x = D[1].x - D[0].x,
+                    this._tangent.y = D[1].y - D[0].y;
             for (let i = 0; i < r; i++) {
                 const i_k = i + k + 1;
-                const a = (t - K[i_k - r]!) / (K[i_k]! - K[i_k - r]!);
-                const d0 = D[i]!, d1 = D[i + 1]!;
+                const a = (t - K[i_k - r]) / (K[i_k] - K[i_k - r]);
+                const d0 = D[i], d1 = D[i + 1];
                 d0.x = (1 - a) * d0.x + a * d1.x;
                 d0.y = (1 - a) * d0.y + a * d1.y;
             }
         }
-        return D[0]!;
+        return D[0];
     }
 
     protected normalize(t: number): number {
         t = Math.max(0, Math.min(t, 1));
         const p = this.degree;
         const K = this.K;
-        return K[p]! + t * (K[K.length - p - 1]! - K[p]!);
+        return K[p] + t * (K[K.length - p - 1] - K[p]);
     }
 
     protected findInterval(t: number): number {
         const { K, degree: p } = this;
         const n = K.length;
         for (let i = p; i < n - p - 1; i++)
-            if (t < K[i + 1]!)
+            if (t < K[i + 1])
                 return i;
         return n - p - 2;
     }

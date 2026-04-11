@@ -165,7 +165,7 @@ export class Render {
                 else ctx.lineTo(v.x, v.y);
             });
             if (closed)
-                ctx.lineTo(CV[0]!.x, CV[0]!.y);
+                ctx.lineTo(CV[0].x, CV[0].y);
             ctx.stroke();
 
             // control vertices

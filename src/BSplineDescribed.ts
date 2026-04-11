@@ -24,15 +24,15 @@ export class BSplineDescribed extends BSpline {
         t = this.normalize(t);
         const k = this.findInterval(t);
         for (let i = 0; i <= p; i++)
-            G[0][i]!.x = C[i + k - p]!.x, G[0][i]!.y = C[i + k - p]!.y;
+            G[0][i].x = C[i + k - p].x, G[0][i].y = C[i + k - p].y;
         for (let r = p; r > 0; r--) {
             const D0 = G[p - r];
             const D1 = G[p - r + 1];
             for (let i = 0; i < r; i++) {
                 const i_k = i + k + 1;
-                const a = (t - K[i_k - r]!) / (K[i_k]! - K[i_k - r]!);
-                D1[i].x = (1 - a) * D0[i]!.x + a * D0[i + 1]!.x;
-                D1[i].y = (1 - a) * D0[i]!.y + a * D0[i + 1]!.y;
+                const a = (t - K[i_k - r]) / (K[i_k] - K[i_k - r]);
+                D1[i].x = (1 - a) * D0[i].x + a * D0[i + 1].x;
+                D1[i].y = (1 - a) * D0[i].y + a * D0[i + 1].y;
             }
         }
         return this.G;
