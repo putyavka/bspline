@@ -1,3 +1,4 @@
+import { PointLike } from "./PointLike";
 import { PointSet } from "./PointSet";
 import type { Vertex } from "./Vertex";
 
@@ -33,6 +34,12 @@ export class VertexSet implements PointSet {
     }
     remove(index: number): void {
         this.vertices.splice(index, 1);
+        this.onCountChange?.();
+    }
+    fillWith(vertices: PointLike[]) {
+        this.vertices.length = 0;
+        for (const p of vertices)
+            this.vertices.push({x: p.x, y: p.y});
         this.onCountChange?.();
     }
 }

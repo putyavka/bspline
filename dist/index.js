@@ -560,7 +560,43 @@ class Render {
 }
 exports.Render = Render;
 
-},{"./showElement":10}],7:[function(require,module,exports){
+},{"./showElement":11}],7:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VertexListFactory = void 0;
+class VertexListFactory {
+    canvasWidth;
+    canvasHeight;
+    constructor(canvasWidth, canvasHeight) {
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+    }
+    sample() {
+        const cv = this.newCV.bind(this);
+        return [
+            cv(0.5, 0.5), cv(0.1, 0.5), cv(0.1, 0.1),
+            cv(0.9, 0.1), cv(0.9, 0.9), cv(0.1, 0.9),
+        ];
+    }
+    random(count, border = 0.1) {
+        const CV = new Array(count)
+            .fill(0)
+            .map(_ => ({ x: Math.random(), y: Math.random() }));
+        let minX = 1, minY = 1, maxX = 0, maxY = 0;
+        CV.forEach(v => {
+            minX = Math.min(minX, v.x), minY = Math.min(minY, v.y);
+            maxX = Math.max(maxX, v.x), maxY = Math.max(maxY, v.y);
+        });
+        const range = 1 - border * 2;
+        return CV.map(v => this.newCV(border + (v.x - minX) / (maxX - minX) * range, border + (v.y - minY) / (maxY - minY) * range));
+    }
+    newCV(u, v) {
+        return { x: u * this.canvasWidth, y: v * this.canvasHeight };
+    }
+}
+exports.VertexListFactory = VertexListFactory;
+
+},{}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VertexSet = void 0;
@@ -603,10 +639,16 @@ class VertexSet {
         this.vertices.splice(index, 1);
         this.onCountChange?.();
     }
+    fillWith(vertices) {
+        this.vertices.length = 0;
+        for (const p of vertices)
+            this.vertices.push({ x: p.x, y: p.y });
+        this.onCountChange?.();
+    }
 }
 exports.VertexSet = VertexSet;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VertexStorage = void 0;
@@ -632,7 +674,7 @@ class VertexStorage {
 }
 exports.VertexStorage = VertexStorage;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BSplineDescribed_1 = require("./BSplineDescribed");
@@ -640,6 +682,7 @@ const KnotsEditor_1 = require("./KnotsEditor");
 const PointSet_1 = require("./PointSet");
 const Render_1 = require("./Render");
 const showElement_1 = require("./showElement");
+const VertexListFactory_1 = require("./VertexListFactory");
 const VertexSet_1 = require("./VertexSet");
 const VertexStorage_1 = require("./VertexStorage");
 const CURVE_DEGREE_DEFAULT = 3;
@@ -660,6 +703,7 @@ async function main() {
     const closedCheckbox = getElement("closed", "input");
     const degreeSlider = getElement("degree", "input");
     const clearButton = getElement("clear", "button");
+    const randomButton = getElement("random", "button");
     const progressSlider = getElement("progress", "input");
     const decription = getElement("description");
     let curve;
@@ -683,15 +727,22 @@ async function main() {
         updateView();
     };
     const clearCurve = () => {
-        vertexSet.vertices.length = 0;
-        rebuildCurve();
+        vertexSet.fillWith([]);
     };
-    const vertexSet = new VertexSet_1.VertexSet(CV_RADIUS, CV_PICK_RADIUS, rebuildCurve, VertexStorage_1.VertexStorage.load());
+    const randomCurve = () => {
+        const MIN_COUNT = 4, MAX_COUNT = 6;
+        const count = MIN_COUNT + Math.floor(Math.random() * (MAX_COUNT + 1 - MIN_COUNT));
+        vertexSet.fillWith(factory.random(count));
+    };
+    const factory = new VertexListFactory_1.VertexListFactory(curveCanvas.width, curveCanvas.height);
+    const CV = VertexStorage_1.VertexStorage.load() ?? factory.sample();
+    const vertexSet = new VertexSet_1.VertexSet(CV_RADIUS, CV_PICK_RADIUS, rebuildCurve, CV);
     closedCheckbox?.addEventListener("change", rebuildCurve);
     if (degreeSlider)
         degreeSlider.max = `${CURVE_DEGREE_MAX}`;
     degreeSlider?.addEventListener("input", rebuildCurve);
     clearButton?.addEventListener("click", clearCurve);
+    randomButton?.addEventListener("click", randomCurve);
     progressSlider?.addEventListener("input", updateView);
     progressCheckbox?.addEventListener("change", updateView);
     rulerCheckbox?.addEventListener("change", updateView);
@@ -704,7 +755,7 @@ if (document.readyState == "loading")
 else
     main();
 
-},{"./BSplineDescribed":2,"./KnotsEditor":4,"./PointSet":5,"./Render":6,"./VertexSet":7,"./VertexStorage":8,"./showElement":10}],10:[function(require,module,exports){
+},{"./BSplineDescribed":2,"./KnotsEditor":4,"./PointSet":5,"./Render":6,"./VertexListFactory":7,"./VertexSet":8,"./VertexStorage":9,"./showElement":11}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.showElement = showElement;
@@ -712,4 +763,4 @@ function showElement(element, show) {
     element.style = "display: " + (show ? "inline-block" : "none");
 }
 
-},{}]},{},[9]);
+},{}]},{},[10]);

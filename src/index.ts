@@ -3,6 +3,7 @@ import { KnotsEditor } from "./KnotsEditor";
 import { PointSetEditor } from "./PointSet";
 import { Render } from "./Render";
 import { showElement } from "./showElement";
+import { VertexListFactory } from "./VertexListFactory";
 import { VertexSet } from "./VertexSet";
 import { VertexStorage } from "./VertexStorage";
 
@@ -25,6 +26,7 @@ async function main() {
     const closedCheckbox = getElement<HTMLInputElement>("closed", "input");
     const degreeSlider = getElement<HTMLInputElement>("degree", "input");
     const clearButton = getElement<HTMLButtonElement>("clear", "button");
+    const randomButton = getElement<HTMLButtonElement>("random", "button");
     const progressSlider = getElement<HTMLInputElement>("progress", "input");
     const decription = getElement("description");
 
@@ -50,14 +52,21 @@ async function main() {
         updateView();
     }
     const clearCurve = () => {
-        vertexSet.vertices.length = 0;
-        rebuildCurve();
+        vertexSet.fillWith([]);
     }
-    const vertexSet = new VertexSet(CV_RADIUS, CV_PICK_RADIUS,  rebuildCurve, VertexStorage.load());
+    const randomCurve = () => {
+        const MIN_COUNT = 4, MAX_COUNT = 6;
+        const count = MIN_COUNT + Math.floor(Math.random() * (MAX_COUNT + 1 - MIN_COUNT));
+        vertexSet.fillWith(factory.random(count));
+    }
+    const factory = new VertexListFactory(curveCanvas.width, curveCanvas.height);
+    const CV = VertexStorage.load() ?? factory.sample();
+    const vertexSet = new VertexSet(CV_RADIUS, CV_PICK_RADIUS,  rebuildCurve, CV);
     closedCheckbox?.addEventListener("change", rebuildCurve);
     if (degreeSlider) degreeSlider.max = `${CURVE_DEGREE_MAX}`;
     degreeSlider?.addEventListener("input", rebuildCurve);
     clearButton?.addEventListener("click", clearCurve);
+    randomButton?.addEventListener("click", randomCurve);
     progressSlider?.addEventListener("input", updateView);
     progressCheckbox?.addEventListener("change", updateView);
     rulerCheckbox?.addEventListener("change", updateView);
