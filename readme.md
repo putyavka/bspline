@@ -4,6 +4,12 @@ B-Spline curve visualization tool implementing [**De Boor's algorithm**](https:/
 
 ## [Live demo](https://putyavka.github.io/bspline/dist/)
 
+#### Clamped curve sample
+![image](./images/curve_clamped.png)
+
+#### Closed curve sample
+![image](./images/curve_closed.png)
+
 ## Features
 
 - **Interactive Control Points**: Add/remove control points with Ctrl+Click
